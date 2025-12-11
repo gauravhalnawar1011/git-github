@@ -9,6 +9,6 @@ document.getElementById("loadBtn").addEventListener("click", () => {
         })
         .catch(err => {
             document.getElementById("result").innerHTML = "<p>Error fetching data!</p>";
-            console.error(err);
+            console.error(err); 
         });
 });
