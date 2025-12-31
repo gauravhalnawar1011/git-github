@@ -1,20 +1,21 @@
-name: Docker image build and push demo
+name: docker image build and push demo  #this for the workflow name 
+on:                                       # code merging code chnagespull manual
+  workflow_dispatch:  # this for the running workflow manually  
 
-on:
-  workflow_dispatch:
+jobs:                       #  we spcify jobs 
+    publish_images: # this first job 
+        runs-on: ubuntu-latest # os you cna use redhat or any other linux based vm 
 
-jobs:
-  publish_images:
-    runs-on: ubuntu-latest
+        steps:     # we spcfiy stesp 
+         - name: Checkout code  # you can give any name in this 
+           uses: actions/checkout@v4   # this for the checkout latest code 
+         - name:  Build and docker image # you can spsifcy the name of your choise 
+           run: |
+             docker build  -t ${{ secrets.DOCKER_HUB_USERNAME}}/github-action-prooject:dev .
+         - name: push docker images to dockerhub  # once image is build we now pushing to dockerhub 
+           run: |
+             docker login -u ${{ secrets.DOCKER_HUB_USERNAME}} -p ${{ secrets.DOCKER_HUB_TOKEN}}
+             docker push ${{ secrets.DOCKER_HUB_USERNAME}}/github-action-prooject:latest 
+            
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t gauravhalnawar2705/github-action-project:latest .
-
-      - name: Push Docker image to Docker Hub
-        run: |
-          docker login -u gauravhalnawar2705 -p "${{ secrets.DOCKER_HUB_TOKEN }}"
-          docker push gauravhalnawar2705/github-action-project:latest
